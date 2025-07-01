@@ -1,0 +1,6 @@
+2025-07-01 18:09:33,300 - ERROR - Configuration file config.yaml not found
+2025-07-01 18:09:33,301 - ERROR - Script failed: [Errno 2] No such file or directory: 'config.yaml'
+2025-07-01 18:11:58,397 - ERROR - Configuration file config.yaml not found
+2025-07-01 18:11:58,398 - ERROR - Script failed: [Errno 2] No such file or directory: 'config.yaml'
+2025-07-01 18:13:12,276 - ERROR - Configuration file config.yaml not found
+2025-07-01 18:13:12,277 - ERROR - Script failed: [Errno 2] No such file or directory: 'config.yaml'
