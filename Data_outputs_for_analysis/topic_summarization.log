@@ -1,0 +1,300 @@
+2025-07-01 10:42:48,131 - INFO - Loaded configuration from config.yaml
+2025-07-01 10:42:48,133 - INFO - All required API keys found in configuration
+2025-07-01 10:42:48,135 - INFO - Initialized TopicSummarizer for 1000-word summaries, run: 1000word_summaries_20250701_104248
+2025-07-01 10:42:48,136 - INFO - Starting TopicSummarizer run: 1000word_summaries_20250701_104248
+2025-07-01 10:42:48,139 - INFO - Initializing clients...
+2025-07-01 10:42:48,196 - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-01 10:42:49,933 - INFO - S3 client initialized
+2025-07-01 10:42:51,124 - INFO - OpenAI client initialized
+2025-07-01 10:42:54,971 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:42:54,988 - INFO - OpenAI API connection test successful
+2025-07-01 10:42:55,952 - INFO - Pinecone client initialized
+2025-07-01 10:42:56,135 - INFO - Use pytorch device_name: cuda:0
+2025-07-01 10:42:56,137 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-07-01 10:43:15,790 - INFO - Sentence transformer initialized
+2025-07-01 10:43:15,792 - INFO - All clients initialized successfully
+2025-07-01 10:43:15,792 - INFO - Loading clustered vectors...
+2025-07-01 10:43:15,868 - INFO - Loaded clustered vectors: 522 items
+2025-07-01 10:43:15,870 - INFO - DataFrame shape: (522, 9), columns: ['id', 'text', 'embedding', 'cluster', 'x', 'y', 'topic_num', 'topic_id', 'topic_score']
+2025-07-01 10:43:15,872 - INFO - Loading BERTopic model from: rizzbot_data/bertopic_model
+2025-07-01 10:43:15,880 - INFO - Use pytorch device_name: cuda:0
+2025-07-01 10:43:15,883 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-07-01 10:43:17,650 - INFO - Loaded BERTopic model with 54 topics
+2025-07-01 10:43:17,651 - INFO - Grouping documents by topic...
+2025-07-01 10:43:17,678 - INFO - Grouped documents into 45 topics
+2025-07-01 10:43:17,678 - INFO - Starting 1000-word summarization for 45 topics...
+2025-07-01 10:43:17,687 - INFO - Generating 1000-word summary for topic 0 with 142 documents
+2025-07-01 10:43:17,689 - INFO - Combined text length: 166992 characters
+2025-07-01 10:43:35,157 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:43:35,161 - INFO - Successfully generated summary for topic 0: 4807 characters
+2025-07-01 10:43:36,086 - INFO - Saved topic 0 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_0.json
+2025-07-01 10:43:41,861 - INFO - Saved 10 chunks for topic 0 to Pinecone
+2025-07-01 10:43:41,866 - INFO - Generating 1000-word summary for topic 3 with 45 documents
+2025-07-01 10:43:41,867 - INFO - Combined text length: 161456 characters
+2025-07-01 10:44:04,765 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:44:04,770 - INFO - Successfully generated summary for topic 3: 5593 characters
+2025-07-01 10:44:05,709 - INFO - Saved topic 3 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_3.json
+2025-07-01 10:44:06,454 - INFO - Saved 12 chunks for topic 3 to Pinecone
+2025-07-01 10:44:06,458 - INFO - Generating 1000-word summary for topic 4 with 22 documents
+2025-07-01 10:44:06,460 - INFO - Combined text length: 80309 characters
+2025-07-01 10:44:25,085 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:44:25,089 - INFO - Successfully generated summary for topic 4: 5437 characters
+2025-07-01 10:44:25,982 - INFO - Saved topic 4 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_4.json
+2025-07-01 10:44:26,698 - INFO - Saved 11 chunks for topic 4 to Pinecone
+2025-07-01 10:44:26,701 - INFO - Generating 1000-word summary for topic 5 with 18 documents
+2025-07-01 10:44:26,703 - INFO - Combined text length: 67388 characters
+2025-07-01 10:44:47,260 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:44:47,265 - INFO - Successfully generated summary for topic 5: 6028 characters
+2025-07-01 10:44:48,152 - INFO - Saved topic 5 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_5.json
+2025-07-01 10:44:48,873 - INFO - Saved 13 chunks for topic 5 to Pinecone
+2025-07-01 10:44:48,877 - INFO - Generating 1000-word summary for topic 6 with 18 documents
+2025-07-01 10:44:48,879 - INFO - Combined text length: 64600 characters
+2025-07-01 10:44:48,946 - INFO - Retrying request to /chat/completions in 0.420672 seconds
+2025-07-01 10:45:07,537 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:45:07,541 - INFO - Successfully generated summary for topic 6: 5941 characters
+2025-07-01 10:45:08,447 - INFO - Saved topic 6 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_6.json
+2025-07-01 10:45:09,134 - INFO - Saved 12 chunks for topic 6 to Pinecone
+2025-07-01 10:45:09,138 - INFO - Generating 1000-word summary for topic 7 with 15 documents
+2025-07-01 10:45:09,139 - INFO - Combined text length: 55562 characters
+2025-07-01 10:45:27,606 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:45:27,611 - INFO - Successfully generated summary for topic 7: 5158 characters
+2025-07-01 10:45:28,471 - INFO - Saved topic 7 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_7.json
+2025-07-01 10:45:29,244 - INFO - Saved 11 chunks for topic 7 to Pinecone
+2025-07-01 10:45:29,246 - INFO - Generating 1000-word summary for topic 8 with 14 documents
+2025-07-01 10:45:29,248 - INFO - Combined text length: 24371 characters
+2025-07-01 10:45:52,798 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:45:52,803 - INFO - Successfully generated summary for topic 8: 6429 characters
+2025-07-01 10:45:53,705 - INFO - Saved topic 8 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_8.json
+2025-07-01 10:45:54,461 - INFO - Saved 13 chunks for topic 8 to Pinecone
+2025-07-01 10:45:54,465 - INFO - Generating 1000-word summary for topic 10 with 13 documents
+2025-07-01 10:45:54,467 - INFO - Combined text length: 44147 characters
+2025-07-01 10:46:12,868 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:46:12,872 - INFO - Successfully generated summary for topic 10: 5323 characters
+2025-07-01 10:46:13,743 - INFO - Saved topic 10 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_10.json
+2025-07-01 10:46:14,369 - INFO - Saved 11 chunks for topic 10 to Pinecone
+2025-07-01 10:46:14,373 - INFO - Generating 1000-word summary for topic 11 with 12 documents
+2025-07-01 10:46:14,375 - INFO - Combined text length: 22787 characters
+2025-07-01 10:46:29,150 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:46:29,154 - INFO - Successfully generated summary for topic 11: 6242 characters
+2025-07-01 10:46:30,033 - INFO - Saved topic 11 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_11.json
+2025-07-01 10:46:30,766 - INFO - Saved 13 chunks for topic 11 to Pinecone
+2025-07-01 10:46:30,770 - INFO - Generating 1000-word summary for topic 13 with 11 documents
+2025-07-01 10:46:30,772 - INFO - Combined text length: 36413 characters
+2025-07-01 10:46:47,686 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:46:47,691 - INFO - Successfully generated summary for topic 13: 5677 characters
+2025-07-01 10:46:48,617 - INFO - Saved topic 13 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_13.json
+2025-07-01 10:46:49,291 - INFO - Saved 12 chunks for topic 13 to Pinecone
+2025-07-01 10:46:49,296 - INFO - Generating 1000-word summary for topic 14 with 10 documents
+2025-07-01 10:46:49,298 - INFO - Combined text length: 35004 characters
+2025-07-01 10:47:04,949 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:47:04,953 - INFO - Successfully generated summary for topic 14: 6071 characters
+2025-07-01 10:47:05,843 - INFO - Saved topic 14 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_14.json
+2025-07-01 10:47:06,560 - INFO - Saved 13 chunks for topic 14 to Pinecone
+2025-07-01 10:47:06,563 - INFO - Generating 1000-word summary for topic 15 with 10 documents
+2025-07-01 10:47:06,564 - INFO - Combined text length: 35164 characters
+2025-07-01 10:47:24,241 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:47:24,246 - INFO - Successfully generated summary for topic 15: 5686 characters
+2025-07-01 10:47:25,326 - INFO - Saved topic 15 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_15.json
+2025-07-01 10:47:26,159 - INFO - Saved 12 chunks for topic 15 to Pinecone
+2025-07-01 10:47:26,164 - INFO - Generating 1000-word summary for topic 16 with 9 documents
+2025-07-01 10:47:26,165 - INFO - Combined text length: 19626 characters
+2025-07-01 10:47:42,775 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:47:42,788 - INFO - Successfully generated summary for topic 16: 5689 characters
+2025-07-01 10:47:43,869 - INFO - Saved topic 16 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_16.json
+2025-07-01 10:47:44,786 - INFO - Saved 12 chunks for topic 16 to Pinecone
+2025-07-01 10:47:44,791 - INFO - Generating 1000-word summary for topic 17 with 9 documents
+2025-07-01 10:47:44,793 - INFO - Combined text length: 31391 characters
+2025-07-01 10:48:03,757 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:48:03,765 - INFO - Successfully generated summary for topic 17: 5874 characters
+2025-07-01 10:48:04,871 - INFO - Saved topic 17 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_17.json
+2025-07-01 10:48:05,709 - INFO - Saved 12 chunks for topic 17 to Pinecone
+2025-07-01 10:48:05,713 - INFO - Generating 1000-word summary for topic 18 with 9 documents
+2025-07-01 10:48:05,717 - INFO - Combined text length: 32047 characters
+2025-07-01 10:48:21,846 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:48:21,862 - INFO - Successfully generated summary for topic 18: 6063 characters
+2025-07-01 10:48:22,998 - INFO - Saved topic 18 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_18.json
+2025-07-01 10:48:24,012 - INFO - Saved 13 chunks for topic 18 to Pinecone
+2025-07-01 10:48:24,017 - INFO - Generating 1000-word summary for topic 19 with 9 documents
+2025-07-01 10:48:24,019 - INFO - Combined text length: 31748 characters
+2025-07-01 10:48:38,487 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:48:38,491 - INFO - Successfully generated summary for topic 19: 5428 characters
+2025-07-01 10:48:39,633 - INFO - Saved topic 19 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_19.json
+2025-07-01 10:48:40,533 - INFO - Saved 11 chunks for topic 19 to Pinecone
+2025-07-01 10:48:40,538 - INFO - Generating 1000-word summary for topic 20 with 8 documents
+2025-07-01 10:48:40,541 - INFO - Combined text length: 29209 characters
+2025-07-01 10:48:58,085 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:48:58,093 - INFO - Successfully generated summary for topic 20: 5684 characters
+2025-07-01 10:48:59,165 - INFO - Saved topic 20 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_20.json
+2025-07-01 10:48:59,962 - INFO - Saved 12 chunks for topic 20 to Pinecone
+2025-07-01 10:48:59,966 - INFO - Generating 1000-word summary for topic 21 with 8 documents
+2025-07-01 10:48:59,970 - INFO - Combined text length: 3929 characters
+2025-07-01 10:49:16,893 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:49:16,896 - INFO - Successfully generated summary for topic 21: 5897 characters
+2025-07-01 10:49:18,183 - INFO - Saved topic 21 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_21.json
+2025-07-01 10:49:19,106 - INFO - Saved 12 chunks for topic 21 to Pinecone
+2025-07-01 10:49:19,109 - INFO - Generating 1000-word summary for topic 24 with 8 documents
+2025-07-01 10:49:19,111 - INFO - Combined text length: 25502 characters
+2025-07-01 10:49:33,071 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:49:33,076 - INFO - Successfully generated summary for topic 24: 5565 characters
+2025-07-01 10:49:34,203 - INFO - Saved topic 24 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_24.json
+2025-07-01 10:49:35,023 - INFO - Saved 12 chunks for topic 24 to Pinecone
+2025-07-01 10:49:35,027 - INFO - Generating 1000-word summary for topic 25 with 8 documents
+2025-07-01 10:49:35,029 - INFO - Combined text length: 28739 characters
+2025-07-01 10:49:51,964 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:49:51,978 - INFO - Successfully generated summary for topic 25: 5237 characters
+2025-07-01 10:49:53,061 - INFO - Saved topic 25 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_25.json
+2025-07-01 10:49:53,833 - INFO - Saved 11 chunks for topic 25 to Pinecone
+2025-07-01 10:49:53,837 - INFO - Generating 1000-word summary for topic 26 with 8 documents
+2025-07-01 10:49:53,839 - INFO - Combined text length: 29870 characters
+2025-07-01 10:50:19,039 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:50:19,044 - INFO - Successfully generated summary for topic 26: 6135 characters
+2025-07-01 10:50:20,224 - INFO - Saved topic 26 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_26.json
+2025-07-01 10:50:21,140 - INFO - Saved 13 chunks for topic 26 to Pinecone
+2025-07-01 10:50:21,144 - INFO - Generating 1000-word summary for topic 27 with 6 documents
+2025-07-01 10:50:21,147 - INFO - Combined text length: 21976 characters
+2025-07-01 10:50:39,570 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:50:39,576 - INFO - Successfully generated summary for topic 27: 6188 characters
+2025-07-01 10:50:40,680 - INFO - Saved topic 27 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_27.json
+2025-07-01 10:50:41,577 - INFO - Saved 13 chunks for topic 27 to Pinecone
+2025-07-01 10:50:41,582 - INFO - Generating 1000-word summary for topic 28 with 6 documents
+2025-07-01 10:50:41,585 - INFO - Combined text length: 3237 characters
+2025-07-01 10:51:01,432 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:51:01,437 - INFO - Successfully generated summary for topic 28: 5365 characters
+2025-07-01 10:51:02,565 - INFO - Saved topic 28 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_28.json
+2025-07-01 10:51:03,361 - INFO - Saved 11 chunks for topic 28 to Pinecone
+2025-07-01 10:51:03,367 - INFO - Generating 1000-word summary for topic 30 with 6 documents
+2025-07-01 10:51:03,369 - INFO - Combined text length: 22273 characters
+2025-07-01 10:51:22,836 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:51:22,840 - INFO - Successfully generated summary for topic 30: 6154 characters
+2025-07-01 10:51:24,091 - INFO - Saved topic 30 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_30.json
+2025-07-01 10:51:24,995 - INFO - Saved 13 chunks for topic 30 to Pinecone
+2025-07-01 10:51:24,999 - INFO - Generating 1000-word summary for topic 31 with 6 documents
+2025-07-01 10:51:25,001 - INFO - Combined text length: 22427 characters
+2025-07-01 10:51:41,062 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:51:41,066 - INFO - Successfully generated summary for topic 31: 6100 characters
+2025-07-01 10:51:42,202 - INFO - Saved topic 31 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_31.json
+2025-07-01 10:51:43,059 - INFO - Saved 13 chunks for topic 31 to Pinecone
+2025-07-01 10:51:43,062 - INFO - Generating 1000-word summary for topic 32 with 6 documents
+2025-07-01 10:51:43,063 - INFO - Combined text length: 23255 characters
+2025-07-01 10:52:01,850 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:52:01,859 - INFO - Successfully generated summary for topic 32: 5937 characters
+2025-07-01 10:52:02,943 - INFO - Saved topic 32 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_32.json
+2025-07-01 10:52:03,767 - INFO - Saved 12 chunks for topic 32 to Pinecone
+2025-07-01 10:52:03,772 - INFO - Generating 1000-word summary for topic 33 with 6 documents
+2025-07-01 10:52:03,774 - INFO - Combined text length: 20170 characters
+2025-07-01 10:52:30,573 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:52:30,578 - INFO - Successfully generated summary for topic 33: 5774 characters
+2025-07-01 10:52:31,655 - INFO - Saved topic 33 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_33.json
+2025-07-01 10:52:32,557 - INFO - Saved 12 chunks for topic 33 to Pinecone
+2025-07-01 10:52:32,561 - INFO - Generating 1000-word summary for topic 34 with 6 documents
+2025-07-01 10:52:32,562 - INFO - Combined text length: 22242 characters
+2025-07-01 10:52:52,334 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:52:52,341 - INFO - Successfully generated summary for topic 34: 6148 characters
+2025-07-01 10:52:53,449 - INFO - Saved topic 34 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_34.json
+2025-07-01 10:52:54,354 - INFO - Saved 13 chunks for topic 34 to Pinecone
+2025-07-01 10:52:54,357 - INFO - Generating 1000-word summary for topic 35 with 5 documents
+2025-07-01 10:52:54,360 - INFO - Combined text length: 16334 characters
+2025-07-01 10:53:14,860 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:53:14,867 - INFO - Successfully generated summary for topic 35: 5586 characters
+2025-07-01 10:53:15,949 - INFO - Saved topic 35 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_35.json
+2025-07-01 10:53:16,741 - INFO - Saved 12 chunks for topic 35 to Pinecone
+2025-07-01 10:53:16,747 - INFO - Generating 1000-word summary for topic 36 with 5 documents
+2025-07-01 10:53:16,751 - INFO - Combined text length: 18792 characters
+2025-07-01 10:53:34,547 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:53:34,552 - INFO - Successfully generated summary for topic 36: 5793 characters
+2025-07-01 10:53:35,715 - INFO - Saved topic 36 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_36.json
+2025-07-01 10:53:36,570 - INFO - Saved 12 chunks for topic 36 to Pinecone
+2025-07-01 10:53:36,575 - INFO - Generating 1000-word summary for topic 37 with 5 documents
+2025-07-01 10:53:36,577 - INFO - Combined text length: 18866 characters
+2025-07-01 10:53:51,213 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:53:51,219 - INFO - Successfully generated summary for topic 37: 5342 characters
+2025-07-01 10:53:52,288 - INFO - Saved topic 37 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_37.json
+2025-07-01 10:53:53,060 - INFO - Saved 11 chunks for topic 37 to Pinecone
+2025-07-01 10:53:53,063 - INFO - Generating 1000-word summary for topic 38 with 5 documents
+2025-07-01 10:53:53,066 - INFO - Combined text length: 1337 characters
+2025-07-01 10:54:06,406 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:54:06,412 - INFO - Successfully generated summary for topic 38: 5152 characters
+2025-07-01 10:54:07,299 - INFO - Saved topic 38 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_38.json
+2025-07-01 10:54:07,853 - INFO - Saved 11 chunks for topic 38 to Pinecone
+2025-07-01 10:54:07,855 - INFO - Generating 1000-word summary for topic 40 with 5 documents
+2025-07-01 10:54:07,857 - INFO - Combined text length: 9337 characters
+2025-07-01 10:54:20,062 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:54:20,066 - INFO - Successfully generated summary for topic 40: 5798 characters
+2025-07-01 10:54:21,015 - INFO - Saved topic 40 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_40.json
+2025-07-01 10:54:21,650 - INFO - Saved 12 chunks for topic 40 to Pinecone
+2025-07-01 10:54:21,655 - INFO - Generating 1000-word summary for topic 41 with 5 documents
+2025-07-01 10:54:21,655 - INFO - Combined text length: 18213 characters
+2025-07-01 10:54:41,818 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:54:41,824 - INFO - Successfully generated summary for topic 41: 5891 characters
+2025-07-01 10:54:42,739 - INFO - Saved topic 41 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_41.json
+2025-07-01 10:54:43,403 - INFO - Saved 12 chunks for topic 41 to Pinecone
+2025-07-01 10:54:43,407 - INFO - Generating 1000-word summary for topic 42 with 5 documents
+2025-07-01 10:54:43,409 - INFO - Combined text length: 17199 characters
+2025-07-01 10:55:00,423 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:55:00,427 - INFO - Successfully generated summary for topic 42: 6239 characters
+2025-07-01 10:55:01,381 - INFO - Saved topic 42 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_42.json
+2025-07-01 10:55:02,012 - INFO - Saved 13 chunks for topic 42 to Pinecone
+2025-07-01 10:55:02,016 - INFO - Generating 1000-word summary for topic 43 with 4 documents
+2025-07-01 10:55:02,017 - INFO - Combined text length: 15135 characters
+2025-07-01 10:55:26,745 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:55:26,753 - INFO - Successfully generated summary for topic 43: 6440 characters
+2025-07-01 10:55:27,620 - INFO - Saved topic 43 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_43.json
+2025-07-01 10:55:28,277 - INFO - Saved 13 chunks for topic 43 to Pinecone
+2025-07-01 10:55:28,280 - INFO - Generating 1000-word summary for topic 44 with 4 documents
+2025-07-01 10:55:28,281 - INFO - Combined text length: 14060 characters
+2025-07-01 10:55:45,560 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:55:45,566 - INFO - Successfully generated summary for topic 44: 5306 characters
+2025-07-01 10:55:46,549 - INFO - Saved topic 44 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_44.json
+2025-07-01 10:55:47,129 - INFO - Saved 11 chunks for topic 44 to Pinecone
+2025-07-01 10:55:47,135 - INFO - Generating 1000-word summary for topic 45 with 4 documents
+2025-07-01 10:55:47,137 - INFO - Combined text length: 14340 characters
+2025-07-01 10:56:04,004 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:56:04,015 - INFO - Successfully generated summary for topic 45: 5726 characters
+2025-07-01 10:56:04,975 - INFO - Saved topic 45 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_45.json
+2025-07-01 10:56:05,647 - INFO - Saved 12 chunks for topic 45 to Pinecone
+2025-07-01 10:56:05,651 - INFO - Generating 1000-word summary for topic 46 with 4 documents
+2025-07-01 10:56:05,654 - INFO - Combined text length: 10618 characters
+2025-07-01 10:56:20,219 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:56:20,222 - INFO - Successfully generated summary for topic 46: 5551 characters
+2025-07-01 10:56:21,192 - INFO - Saved topic 46 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_46.json
+2025-07-01 10:56:21,825 - INFO - Saved 12 chunks for topic 46 to Pinecone
+2025-07-01 10:56:21,829 - INFO - Generating 1000-word summary for topic 48 with 4 documents
+2025-07-01 10:56:21,831 - INFO - Combined text length: 14473 characters
+2025-07-01 10:56:36,564 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:56:36,569 - INFO - Successfully generated summary for topic 48: 6002 characters
+2025-07-01 10:56:37,637 - INFO - Saved topic 48 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_48.json
+2025-07-01 10:56:38,392 - INFO - Saved 13 chunks for topic 48 to Pinecone
+2025-07-01 10:56:38,395 - INFO - Generating 1000-word summary for topic 49 with 4 documents
+2025-07-01 10:56:38,397 - INFO - Combined text length: 12764 characters
+2025-07-01 10:57:08,206 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:57:08,211 - INFO - Successfully generated summary for topic 49: 6128 characters
+2025-07-01 10:57:09,160 - INFO - Saved topic 49 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_49.json
+2025-07-01 10:57:09,819 - INFO - Saved 13 chunks for topic 49 to Pinecone
+2025-07-01 10:57:09,823 - INFO - Generating 1000-word summary for topic 50 with 4 documents
+2025-07-01 10:57:09,825 - INFO - Combined text length: 14257 characters
+2025-07-01 10:57:29,599 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:57:29,604 - INFO - Successfully generated summary for topic 50: 6209 characters
+2025-07-01 10:57:30,473 - INFO - Saved topic 50 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_50.json
+2025-07-01 10:57:31,161 - INFO - Saved 13 chunks for topic 50 to Pinecone
+2025-07-01 10:57:31,165 - INFO - Generating 1000-word summary for topic 51 with 4 documents
+2025-07-01 10:57:31,167 - INFO - Combined text length: 14642 characters
+2025-07-01 10:57:50,995 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:57:50,999 - INFO - Successfully generated summary for topic 51: 5387 characters
+2025-07-01 10:57:51,902 - INFO - Saved topic 51 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_51.json
+2025-07-01 10:57:52,507 - INFO - Saved 11 chunks for topic 51 to Pinecone
+2025-07-01 10:57:52,509 - INFO - Generating 1000-word summary for topic 52 with 4 documents
+2025-07-01 10:57:52,512 - INFO - Combined text length: 11770 characters
+2025-07-01 10:58:14,990 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:58:14,998 - INFO - Successfully generated summary for topic 52: 6122 characters
+2025-07-01 10:58:15,845 - INFO - Saved topic 52 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_52.json
+2025-07-01 10:58:16,536 - INFO - Saved 13 chunks for topic 52 to Pinecone
+2025-07-01 10:58:16,540 - INFO - Generating 1000-word summary for topic 53 with 3 documents
+2025-07-01 10:58:16,543 - INFO - Combined text length: 11025 characters
+2025-07-01 10:58:31,957 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-01 10:58:31,962 - INFO - Successfully generated summary for topic 53: 5242 characters
+2025-07-01 10:58:32,852 - INFO - Saved topic 53 to S3: rizzbot/Summaries/1000word_summaries_20250701_104248/topic_53.json
+2025-07-01 10:58:33,437 - INFO - Saved 11 chunks for topic 53 to Pinecone
+2025-07-01 10:58:33,507 - INFO - Saved 45 summaries locally in rizzbot_data/summaries_1000word_summaries_20250701_104248
+2025-07-01 10:58:33,509 - INFO - Summarization completed for 1000word_summaries_20250701_104248
+2025-07-01 10:58:33,511 - INFO - Successful: 45 | Failed: 0
+2025-07-01 10:58:33,513 - INFO - Run 1000word_summaries_20250701_104248 completed successfully with 45 summaries
