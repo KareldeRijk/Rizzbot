@@ -13,7 +13,7 @@ def respond_to_question(user_input):
 # Create the Gradio interface
 with gr.Blocks(theme=gr.themes.Base(), css="body {background-color: #000000; color: #FFFFFF;}") as demo:
     gr.Markdown(
-        "<h1 style='text-align: center; color: white;'>Welcome to Rizzbot: the chatbot to help you autists become better communicators!</h1>"
+        "<h1 style='text-align: center; color: white;'>Welcome to Rizzbot: the chatbot to turn cringelords into rizzkings!</h1>"
     )
 
     with gr.Column():
