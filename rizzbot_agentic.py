@@ -2,7 +2,7 @@
 
 import os
 import numpy as np
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from langchain.schema.runnable import RunnableLambda, RunnableBranch
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -18,8 +18,9 @@ class Rizzbot:
     def __init__(self):
         print("[INIT] Starting Rizzbot initialization...")
         _ = self._load_env()
-        self.similarity_threshold = 0.65
+        self.similarity_threshold = 0.3
         self.top_k = 3
+        self.summary_threshold = 3  # Stop after finding this many docs in summaries
 
         os.environ["LANGCHAIN_TRACING_V2"] = "true"
         os.environ["LANGCHAIN_PROJECT"] = "rizzbot"
@@ -66,10 +67,10 @@ class Rizzbot:
         4. Use examples when possible
         5. Keep the tone encouraging and supportive
         6. If information is insufficient, explain what you'd need to give a better answer
+        7. At the end of your response, include a "Sources:" section listing the document sources used
 
         Response:
         """)
-
 
         self._build_agent_chain()
         print("[INIT] Rizzbot initialized and ready.")
@@ -91,6 +92,7 @@ class Rizzbot:
 
     def _filter_by_similarity(self, query_embedding, docs, threshold):
         filtered = []
+        sources = []
 
         for doc in docs:
             try:
@@ -100,47 +102,91 @@ class Rizzbot:
 
                 if sim >= threshold:
                     filtered.append(doc)
+                    # Extract source information from document metadata
+                    source_info = self._extract_source_info(doc)
+                    sources.append(source_info)
             except Exception as e:
                 print(f"[Similarity] Failed to embed doc: {e}")
 
-        return filtered
+        return filtered, sources
 
-    def _hybrid_query_search(self, question: str) -> List[str]:
+    def _extract_source_info(self, doc) -> str:
+        """Extract source information from document metadata"""
+        if hasattr(doc, 'metadata') and doc.metadata:
+            # Try to get source information from metadata
+            source = doc.metadata.get('source', 'Unknown source')
+            title = doc.metadata.get('title', '')
+            if title:
+                return f"{title} ({source})"
+            else:
+                return source
+        else:
+            # Fallback to truncated content as identifier
+            return f"Document: {doc.page_content[:50]}..."
+
+    def _hybrid_query_search(self, question: str) -> Tuple[List[str], List[str]]:
         print(f"[Search:Hybrid] Embedding question...")
         question_embedding = self._embed_question(question)
         combined_results = []
+        all_sources = []
 
-        for label, vectorstore in [("summaries", self.summaries_vectorstore), ("full", self.full_vectorstore)]:
-            print(f"[Search:Hybrid] Trying {label} vectorstore...")
-
-            try:
-                retriever = MultiQueryRetriever.from_llm(
-                    retriever=vectorstore.as_retriever(search_kwargs={"k": self.top_k}),
-                    llm=self.expand_llm
-                )
-                docs = retriever.invoke(question)
-                filtered = self._filter_by_similarity(question_embedding, docs, self.similarity_threshold)
-                print(f"[Search:Hybrid] {len(filtered)} docs passed threshold in {label}.")
+        # First, try summaries vectorstore
+        print(f"[Search:Hybrid] Trying summaries vectorstore...")
+        try:
+            retriever = MultiQueryRetriever.from_llm(
+                retriever=self.summaries_vectorstore.as_retriever(search_kwargs={"k": self.top_k}),
+                llm=self.expand_llm
+            )
+            docs = retriever.invoke(question)
+            filtered, sources = self._filter_by_similarity(question_embedding, docs, self.similarity_threshold)
+            print(f"[Search:Hybrid] {len(filtered)} docs passed threshold in summaries.")
+            
+            if len(filtered) > self.summary_threshold:
+                print(f"[Search:Hybrid] Found {len(filtered)} docs in summaries (>{self.summary_threshold}), skipping full search.")
                 combined_results.extend([doc.page_content for doc in filtered])
-            except Exception as e:
-                print(f"[Search:Hybrid] Retrieval failed for {label}: {e}")
+                all_sources.extend(sources)
+                return combined_results, all_sources
+            else:
+                combined_results.extend([doc.page_content for doc in filtered])
+                all_sources.extend(sources)
+        except Exception as e:
+            print(f"[Search:Hybrid] Retrieval failed for summaries: {e}")
 
-        return combined_results
+        # If we didn't find enough in summaries, search full vectorstore
+        print(f"[Search:Hybrid] Trying full vectorstore...")
+        try:
+            retriever = MultiQueryRetriever.from_llm(
+                retriever=self.full_vectorstore.as_retriever(search_kwargs={"k": self.top_k}),
+                llm=self.expand_llm
+            )
+            docs = retriever.invoke(question)
+            filtered, sources = self._filter_by_similarity(question_embedding, docs, self.similarity_threshold)
+            print(f"[Search:Hybrid] {len(filtered)} docs passed threshold in full.")
+            combined_results.extend([doc.page_content for doc in filtered])
+            all_sources.extend(sources)
+        except Exception as e:
+            print(f"[Search:Hybrid] Retrieval failed for full: {e}")
+
+        return combined_results, all_sources
 
     def _build_agent_chain(self):
         print("[Chain] Building agent chain...")
 
-        def hybrid_search(q):
-            results = self._hybrid_query_search(q)
+        def hybrid_search_with_sources(q):
+            results, sources = self._hybrid_query_search(q)
             if results:
-                return "\n\n".join(results)  # merge the filtered context into one string
+                content = "\n\n".join(results)
+                # Add sources to the content for the LLM to use
+                if sources:
+                    content += f"\n\nSources: {', '.join(set(sources))}"
+                return content
             else:
                 return self.no_answer_response
     
         self.agent_chain = (
             {
                 "question": lambda q: q,
-                "content": hybrid_search,
+                "content": hybrid_search_with_sources,
             }
             | self.base_prompt_template
             | self.main_llm
@@ -152,7 +198,7 @@ class Rizzbot:
     def answer_question(self, question: str) -> str:
         print(f"[Answer] Received question: {question}")
         try:
-            context = self._hybrid_query_search(question)
+            context, sources = self._hybrid_query_search(question)
             if not context:
                 print("[Answer] No relevant documents found. Returning fallback response.")
                 return self.no_answer_response
@@ -165,15 +211,3 @@ class Rizzbot:
             print(f"[Answer] Agentic pipeline failed: {e}")
             return self.no_answer_response
 
-
-if __name__ == "__main__":
-    print("[Test] Starting test run for Rizzbot...\n")
-    
-    bot = Rizzbot()
-    sample_question = "What is the capital of Russia?"
-
-    print(f"\n[Test] Asking: {sample_question}\n")
-    answer = bot.answer_question(sample_question)
-
-    print("\n[Test] Final Answer:")
-    print(answer)
