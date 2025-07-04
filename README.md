@@ -11,7 +11,7 @@ The goal of this final project is to develop a RAG system or AI bot that combine
 # Data collection and preprocessing
 To collect the data for the RAG system, I used the yt-dlp library to download the audio of 179 videos. Then transcribed the audio to text via OpenAi's Whisper. The text is then chunked and embedded into a PineCone vector database.
 Afterwards, I ran some unsupervised learning over the embedded collected text in order to find out what the most common semantic topics that are discussed in the dataset. For this, I used DBSCAN to create clusters, then applied BERTopic to assign semantic topic lables to each cluster. Cleaned up the clusters containing advertisements and then vectorized and saved these clusters to pinecone again. This left 41 clusters of the most common topics.
-Finally, I used chatgpt to create summaries (of 1000 words each) of these most common topics and embedded plus saved these. These summaries will be used later in the final architecture to speed up processing as a caching system. 
+Finally, I used chatgpt to create summaries (of 1000 words each) of these most common topics, then embedded and saved these with relevant metadata tags for retrieval later on. These summaries will be used later in the final architecture to speed up processing as a caching system. 
 Note that in the entire data collection and preprocessing pipeline, the data is only stored temporarily on my local memory for processing where necessary. Other than that, all data is stored and pulled from an AWS Bucket and PineCone Vector database. All temporarily stored data is deleted after use. This is to save memory from my local device, all is stored in the cloud. All vectors are stored in 1536 dimensions, so that they can be used by ChatGPT-4o in the final agentic architecture. 
 
 # Agentic Chatbot architecture
@@ -39,7 +39,6 @@ Found? -> Yes? -> Main model generates summary from context -> Answer
    No
    |
 Answer: Sorry bro, I don't have enough information in my database to confidently answer.  
-
 
 The agentic chain is built using LangChain. Additionally, LangSmith is incorporated to keep track of the chain. 
 The main Tool used by the Agent is the RAG database. Because the point of the bot is to only answer based on information in the database, the instructions of the main model are tuned so that it is only allowed to answer if it can find enough relevant information in the database. 
