@@ -20,7 +20,8 @@ class Rizzbot:
         _ = self._load_env()
         self.similarity_threshold = 0.3
         self.top_k = 3
-        self.summary_threshold = 3  # Stop after finding this many docs in summaries
+        self.summary_threshold = 2  # Stop after finding this many docs in summaries
+        self.min_docs_threshold = 2  # Minimum docs required to attempt answer generation
 
         os.environ["LANGCHAIN_TRACING_V2"] = "true"
         os.environ["LANGCHAIN_PROJECT"] = "rizzbot"
@@ -172,21 +173,21 @@ class Rizzbot:
     def _build_agent_chain(self):
         print("[Chain] Building agent chain...")
 
-        def hybrid_search_with_sources(q):
-            results, sources = self._hybrid_query_search(q)
-            if results:
-                content = "\n\n".join(results)
-                # Add sources to the content for the LLM to use
+        def format_content_with_sources(content_and_sources):
+            """Format content with sources for the LLM"""
+            content, sources = content_and_sources
+            if content:
+                formatted_content = content
                 if sources:
-                    content += f"\n\nSources: {', '.join(set(sources))}"
-                return content
+                    formatted_content += f"\n\nSources: {', '.join(set(sources))}"
+                return formatted_content
             else:
                 return self.no_answer_response
     
         self.agent_chain = (
             {
                 "question": lambda q: q,
-                "content": hybrid_search_with_sources,
+                "content": format_content_with_sources,
             }
             | self.base_prompt_template
             | self.main_llm
@@ -198,16 +199,29 @@ class Rizzbot:
     def answer_question(self, question: str) -> str:
         print(f"[Answer] Received question: {question}")
         try:
+            # Perform search once
             context, sources = self._hybrid_query_search(question)
-            if not context:
-                print("[Answer] No relevant documents found. Returning fallback response.")
+            
+            # Check if we have enough documents
+            if not context or len(context) < self.min_docs_threshold:
+                print(f"[Answer] Insufficient documents found ({len(context) if context else 0} docs, need {self.min_docs_threshold}). Returning fallback response.")
                 return self.no_answer_response
 
-            print("[Answer] Relevant context found. Generating response with LLM...")
-            answer = self.agent_chain.invoke(question)
+            print(f"[Answer] Found {len(context)} relevant documents. Generating response with LLM...")
+            
+            # Format content with sources
+            content_text = "\n\n".join(context)
+            if sources:
+                content_text += f"\n\nSources: {', '.join(set(sources))}"
+            
+            # Pass the pre-searched content to the chain
+            answer = self.agent_chain.invoke({
+                "question": question,
+                "content": (content_text, sources)
+            })
+            
             print(f"[Answer] Answer generated successfully.")
             return answer
         except Exception as e:
             print(f"[Answer] Agentic pipeline failed: {e}")
             return self.no_answer_response
-

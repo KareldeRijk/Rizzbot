@@ -26,5 +26,5 @@ with gr.Blocks(theme=gr.themes.Base(), css="body {background-color: #000000; col
 
 # Launch the app
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
 
