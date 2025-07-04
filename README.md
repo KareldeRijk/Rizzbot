@@ -1,80 +1,71 @@
-![logo_ironhack_blue 7](https://user-images.githubusercontent.com/23629340/40541063-a07a0a8a-601a-11e8-91b5-2f13e4e6b441.png)
+# Final Project of the AI engineering Bootcamp: Building a Multimodal AI ChatBot for YouTube Video QA
 
-# Project III | Business Case: Building a Multimodal AI ChatBot for YouTube Video QA
+Introducing Rizzbot! Here to help you autistic nerds become charming. 
 
-Building a chatbot that can translate YouTube videos into text and allow for natural language querying offers several compelling business cases.
-
-- Firstly, it improves accessibility for users with hearing impairments or those who prefer reading over watching videos, thereby broadening the audience reach and enhancing brand reputation.
-- Secondly, it enables efficient indexing and searching of video content, allowing users to quickly find specific information within videos, which is particularly useful for educational content and tutorials.
-- Thirdly, it improves customer support by leveraging existing video content to provide instant, accurate responses to customer queries, thus reducing support costs and improving response times.
-- Additionally, it serves educational and training purposes by enhancing the learning experience, enabling easy querying and access to specific segments of instructional videos. From an SEO and content marketing perspective, video transcripts can significantly boost website traffic and video discoverability by improving search engine indexing. Lastly, supporting multiple languages allows the chatbot to cater to a global audience, expanding market reach and enhancing user engagement.
+This is the final project of the 9 week AI engineering bootcamp, I did for Ironhack from 1 May to 4 July 2025. In this project, I built a chatbot that allows for natural language querying on a RAG Database of Youtube Videos. The videos come from the undisputed top-tier Youtube Channel about charisma: Charisma on Command. Users can ask charisma related questions, and the bot will answer based on information in the database only. 
 
 ### Project Overview
 
 The goal of this final project is to develop a RAG system or AI bot that combines the power of text and audio processing to answer questions about YouTube videos. The bot will utilize natural language processing (NLP) techniques and speech recognition to analyze both textual and audio input, extract relevant information from YouTube videos, and provide accurate answers to user queries.
 
-### Key Objectives
+# Data collection and preprocessing
+To collect the data for the RAG system, I used the yt-dlp library to download the audio of 179 videos. Then transcribed the audio to text via OpenAi's Whisper. The text is then chunked and embedded into a PineCone vector database.
+Afterwards, I ran some unsupervised learning over the embedded collected text in order to find out what the most common semantic topics that are discussed in the dataset. For this, I used DBSCAN to create clusters, then applied BERTopic to assign semantic topic lables to each cluster. Cleaned up the clusters containing advertisements and then vectorized and saved these clusters to pinecone again. This left 41 clusters of the most common topics.
+Finally, I used chatgpt to create summaries (of 1000 words each) of these most common topics and embedded plus saved these. These summaries will be used later in the final architecture to speed up processing as a caching system. 
+Note that in the entire data collection and preprocessing pipeline, the data is only stored temporarily on my local memory for processing where necessary. Other than that, all data is stored and pulled from an AWS Bucket and PineCone Vector database. All temporarily stored data is deleted after use. This is to save memory from my local device, all is stored in the cloud. All vectors are stored in 1536 dimensions, so that they can be used by ChatGPT-4o in the final agentic architecture. 
 
-1. Develop a text-based question answering (QA) model using pre-trained language models. You may find it useful to fine-tune your model.
-2. Integrate speech recognition capabilities to convert audio/video input (user questions) into text transcripts.
-3. Build a conversational interface for users to interact with the bot via text or voice input. The latter is not a must.
-4. Retrieve, analyze, and store into a vector database (pinecone, chromabd...) YouTube video content to generate answers to user questions.
-5. Test and evaluate the bot's performance in accurately answering questions about YouTube videos.
-6. Your AI must use agents with several tools and memory.
+# Agentic Chatbot architecture
 
-### Incorporating LangChain & LangSmith
+To see the simplified architecture of the Rizzbot, refer to the diagram below. 
+![alt text](image.png)
 
-To enhance the project with LangChain, you can utilize LangChain agents and functions for various tasks:
+The simplified flow of the bot is as follows:
+User input Question
+   |
+Main model (GPT-4o)
+   |
+Sends the Question to GPT-3.5-turbo for Multi-shot query
+   |
+Semantic search the summaries Pinecone DB
+   |
+Found? -> Yes? -> Use Summary for context + Main model-> Answer
+   |
+   No
+   |
+Semantic Search the full vector DB -> 
+   |
+Found? -> Yes? -> Main model generates summary from context -> Answer
+   |
+   No
+   |
+Answer: Sorry bro, I don't have enough information in my database to confidently answer.  
 
-1. **Text Preprocessing:**
-   - Use LangChain functions for tokenization, lemmatization, and other text preprocessing tasks as you see fit.
 
-2. **QA Model Development:**
-   - Utilize LangChain agents for fine-tuning pre-trained language models from HuggingFace or OpenAI for question answering tasks. If you use OpenAI api key provide by Ironhack, be mindful of the limited credits available for the entire class.
+The agentic chain is built using LangChain. Additionally, LangSmith is incorporated to keep track of the chain. 
+The main Tool used by the Agent is the RAG database. Because the point of the bot is to only answer based on information in the database, the instructions of the main model are tuned so that it is only allowed to answer if it can find enough relevant information in the database. 
+Similarity threshold is set to 0.35, since anything higher means that for most questions the model cannot find any related documents. This is likely due to the fact that most topics and practical tips are spread out in a dispersed manner over multiple documents. 
+The Rizzbot considers enough documents about the user questions found when it has found >= 2 relevant documents. This can be adjusted at your leisure. 
 
-3. **Speech Recognition Integration:**
-   - Incorporate LangChain agents for integrating speech recognition capabilities into the bot, allowing it to process audio and/or text inputs.
 
-4. **Conversational Interface:**
-   - Design conversational flows using LangChain agents to handle user interactions and route queries to the appropriate processing modules.
+# Documents and their uses
+Shiva.ipynb - Dedicated notebook to delete and create pinecone indexes. Because I had to redo (the summaries in particular) a lot of pinecone index saving, I dedicated a notebook specifically to deleting and creating pinecone indexes to save time. Named after Shiva from Hinduism, who is both creator and destroyer. 
 
-5. **YouTube Video Retrieval:**
-   - Develop LangChain agents for accessing YouTube video content and extracting relevant metadata for analysis.
+rizzbot_agentic.py - Contains the working version of the agentic rizzbot system. Rizzbot is written as a class, so that it can be imported for Gradio deployment. Receives a user question, multi-shot-queries the question, checks the pinecone databases (summaries and full text) for relevant data, then summarizes an answer if it finds this in the database. 
 
-6. **Make use of a vector database of your choice**
+gradio_app.py - The Gradio wrapper to deploy rizzbot. It loads the Rizzbot Class from rizzbot_agentic.py, and deploys it in a simple webpage. 
 
-7. **Make use of LangSmith platform for testing, evaluation, and deployment of your AI**
+Folder - Clustering - contains the draft and final jupyter notebook used to create clusters of the vectors using DBSCAN. It then uses BERTopic to assign topics to the created clusters. The last cell cleans out the clusters that contain mostly advertisements. The cleaned clusters + vectors are stored in a .pkl file for later use.
 
-### Deliverables
+Folder - Evaluation - Contains the output of the latest versions of Rizzbot for review. Also contains the notebook Rizzbot_v3 - Agentic-testing+eval which contains the deployed version of the Rizzbot and in the last cell contains an llm evaluation system. This is a simple script that runs ChatGPT-4o over the outputs of Rizzbot and scores them on various metrics. 
 
-1. Source code for the multimodal bot implementation, including LangChain integration.
-2. Documentation detailing the project architecture, methodology, and LangChain usage.
-3. Presentation slides summarizing the project objectives, process, and results.
-4. This must be deployed as a web/mobile app.
+Folder - Preprocessing - contains the drafts and final jupyter notebook used to download YT video audio, convert to text and vectorize the text.
 
-### Project Timeline
+Folder - Pre-summarization - contains the drafts and final jupyter notebooks used to generate summaries of the cleaned clusters pkl. Careful with using V2, there is a recursive function in there that will generate 129k summaries when you run this notebook. The script uses gpt-4o-mini to generate the summaries. All summaries are vectorized and stored with meaningful metadata in the Pinecone database called 'rizzbot-summaries'. 
 
-- Day 1-2: Project kickoff, data collection, and text preprocessing using LangChain functions.
-- Day 3-4: QA model development with LangChain agents and speech recognition integration.
-- Day 5-6: Conversational interface development with LangChain agents and YouTube video retrieval.
-- Day 7: Testing, evaluation, documentation, and presentation preparation.
+Folder - Presentation - contains the Powerpoint presentation that was given at the final day of the Bootcamp.
 
-## Resources
+Folder - Rizzbot_setup - contains the drafts that set up and initialize the agentic rizzbot system. The notebooks are used to test various iterations of the system. The notebook Rizzbot_v3 - Agentic-testing+eval contains the deployed version of the Rizzbot.  
 
-Below are some useful resources, but you don't have to use them.
 
-- [YouTube](https://pypi.org/project/youtube-transcript-api/) Python [module](https://pypi.org/project/yt-dlp/2021.3.7/).
-- [Whisper LLM](https://huggingface.co/openai/whisper-large-v3)
-- Pre-trained language models available in libraries like [HuggingFace](https://huggingface.co/) Transformers.
-- [LangChain](https://python.langchain.com/v0.1/docs/get_started/quickstart/) for text preprocessing, model development, and conversational interface design.
-- [LangSmith](https://www.langchain.com/langsmith) for testing, performance checks, and [deploying](https://langchain-ai.github.io/langgraph/cloud/quick_start/#test-the-graph-build-locally) your model and app.
 
-## Evaluation Criteria
 
-- Accuracy of the bot in answering user questions about YouTube videos.
-- Usability and responsiveness of the conversational interface (latency).
-- Documentation quality and clarity of presentation slides.
-
-## Conclusion
-
-This final project offers an exciting opportunity to explore the intersection of NLP, speech recognition, and multimedia analysis in building a multimodal bot for YouTube video QA. By leveraging state-of-the-art techniques and technologies, including LangChain, you will gain valuable hands-on experience in developing innovative AI applications with real-world impact. You may find it to focus on my topic like health, nutrition, astrophysics...but this is an open ended project in some ways. So, feel free to build something you will be proud of. If you have other source of data other than YouTube you are free to use it.
