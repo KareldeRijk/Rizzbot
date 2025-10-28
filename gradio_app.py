@@ -26,5 +26,12 @@ with gr.Blocks(theme=gr.themes.Base(), css="body {background-color: #000000; col
 
 # Launch the app
 if __name__ == "__main__":
-    demo.launch(share=True)
+    demo = gr.Interface(
+        fn=respond_to_question, inputs=user_input, outputs=output,
+        title="Rizzbot Chatbot")
+    demo.launch(share = True)
+
+    
+
+    
 
