@@ -1,0 +1,9 @@
+node_modules/
+*.log
+*.cache
+OPENAI_API_KEY.txt
+.env.txt
+tmp_files/
+rizzbot_data/
+rizzbot_data\
+config.yaml
