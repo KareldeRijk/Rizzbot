@@ -1,7 +1,7 @@
 # gradio_app.py
 
 import gradio as gr
-from rizzbot_agentic import Rizzbot
+from rizzbot_agentic_v2 import Rizzbot
 
 # Initialize the Rizzbot instance
 rizzbot = Rizzbot()
