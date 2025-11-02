@@ -261,3 +261,28 @@
 2025-07-12 21:39:45,860 - INFO - Summarization completed for 1000word_summaries_20250712_213156
 2025-07-12 21:39:45,861 - INFO - Successful: 39 | Failed: 0
 2025-07-12 21:39:45,862 - INFO - Run 1000word_summaries_20250712_213156 completed successfully with 39 summaries
+2025-10-31 18:47:53,276 - INFO - Loaded configuration from config.yaml
+2025-10-31 18:47:53,278 - INFO - All required API keys found in configuration
+2025-10-31 18:47:53,278 - INFO - Initialized TopicSummarizer for 1000-word summaries, run: 1000word_summaries_20251031_184753
+2025-10-31 18:47:53,280 - INFO - Starting TopicSummarizer run: 1000word_summaries_20251031_184753
+2025-10-31 18:47:53,281 - INFO - Initializing clients...
+2025-10-31 18:47:53,298 - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2025-10-31 18:47:53,462 - INFO - S3 client initialized
+2025-10-31 18:47:53,811 - INFO - OpenAI client initialized
+2025-10-31 18:48:00,314 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-10-31 18:48:00,325 - INFO - OpenAI API connection test successful
+2025-10-31 18:48:00,975 - ERROR - Failed to initialize clients: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'content-type': 'text/plain; charset=utf-8', 'access-control-allow-origin': '*', 'vary': 'origin,access-control-request-method,access-control-request-headers', 'access-control-expose-headers': '*', 'x-pinecone-api-version': '2024-04', 'x-cloud-trace-context': 'af920af21933e3bbe30291f717c14c25', 'date': 'Fri, 31 Oct 2025 17:48:00 GMT', 'server': 'Google Frontend', 'Content-Length': '96', 'Via': '1.1 google', 'Alt-Svc': 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'})
+HTTP response body: {"error":{"code":"NOT_FOUND","message":"Resource rizzbot-summaries-384 not found"},"status":404}
+
+2025-10-31 18:48:00,976 - ERROR - Fatal error during execution: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'content-type': 'text/plain; charset=utf-8', 'access-control-allow-origin': '*', 'vary': 'origin,access-control-request-method,access-control-request-headers', 'access-control-expose-headers': '*', 'x-pinecone-api-version': '2024-04', 'x-cloud-trace-context': 'af920af21933e3bbe30291f717c14c25', 'date': 'Fri, 31 Oct 2025 17:48:00 GMT', 'server': 'Google Frontend', 'Content-Length': '96', 'Via': '1.1 google', 'Alt-Svc': 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'})
+HTTP response body: {"error":{"code":"NOT_FOUND","message":"Resource rizzbot-summaries-384 not found"},"status":404}
+
+2025-10-31 18:48:00,977 - ERROR - Script failed: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'content-type': 'text/plain; charset=utf-8', 'access-control-allow-origin': '*', 'vary': 'origin,access-control-request-method,access-control-request-headers', 'access-control-expose-headers': '*', 'x-pinecone-api-version': '2024-04', 'x-cloud-trace-context': 'af920af21933e3bbe30291f717c14c25', 'date': 'Fri, 31 Oct 2025 17:48:00 GMT', 'server': 'Google Frontend', 'Content-Length': '96', 'Via': '1.1 google', 'Alt-Svc': 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'})
+HTTP response body: {"error":{"code":"NOT_FOUND","message":"Resource rizzbot-summaries-384 not found"},"status":404}
+
