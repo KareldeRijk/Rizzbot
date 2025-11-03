@@ -3,18 +3,17 @@
 import os
 import numpy as np
 from typing import List, Dict, Optional, Tuple
-from langchain.schema.runnable import RunnableLambda, RunnableBranch
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain.agents import AgentExecutor, Tool, initialize_agent, AgentType
+from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_pinecone import PineconeVectorStore
+from langchain_community.vectorstores.pinecone import Pinecone as PineconeVectorStore
 from langchain_huggingface import HuggingFacePipeline
 from langchain_huggingface import HuggingFaceEmbeddings
 from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone
 from langsmith import Client
-from langchain.retrievers.multi_query import MultiQueryRetriever
+'''from langchain_community.retrievers.multi_query import MultiQueryRetriever'''
 from transformers import pipeline, AutoTokenizer, AutoModel
 import torch
 
@@ -57,14 +56,14 @@ class Rizzbot:
         print("[Pinecone] Pinecone client initialized.")
 
         self.summaries_vectorstore = PineconeVectorStore(
-            index_name="rizzbot-summaries-full-text-384",
+            index=self.pc.Index("rizzbot-summaries-full-text-384"),
             embedding=self.embeddings,
-            text_key="full_text"
+            text_key="text"
         )
         print("[VectorStore] Summaries vector store initialized.")
 
         self.full_vectorstore = PineconeVectorStore(
-            index_name="rizzbot-384", embedding=self.embeddings, text_key="full_text"
+            index=self.pc.Index("rizzbot-384"), embedding=self.embeddings, text_key="text"
         )
         print("[VectorStore] Full vector store initialized.")
 
@@ -156,29 +155,17 @@ class Rizzbot:
         combined_results = []
         all_sources = []
     
-        # First, try summaries vectorstore
+        # First, try summaries vectorstore with direct search (MultiQueryRetriever removed)
         print(f"[Search:Hybrid] Trying summaries vectorstore...")
         try:
-            # Try MultiQueryRetriever first, fall back to direct search
-            try:
-                retriever = MultiQueryRetriever.from_llm(
-                    retriever=self.summaries_vectorstore.as_retriever(search_kwargs={"k": self.top_k}),
-                    llm=self.expand_llm
-                )
-                docs = retriever.invoke(question)
-                print(f"[Search:Hybrid] MultiQueryRetriever succeeded for summaries")
-            except (ImportError, ModuleNotFoundError) as e:
-                print(f"[Search:Hybrid] MultiQueryRetriever unavailable ({e}), using direct search")
-                docs = self.summaries_vectorstore.similarity_search(question, k=self.top_k)
-            except Exception as e:
-                print(f"[Search:Hybrid] MultiQueryRetriever failed ({e}), using direct search")
-                docs = self.summaries_vectorstore.similarity_search(question, k=self.top_k)
+            docs = self.summaries_vectorstore.similarity_search(question, k=self.top_k)
+            print(f"[Search:Hybrid] Direct search succeeded for summaries")
                 
             filtered, sources = self._filter_by_similarity(question_embedding, docs, self.similarity_threshold)
             print(f"[Search:Hybrid] {len(filtered)} docs passed threshold in summaries.")
             
             if len(filtered) >= self.summary_threshold:
-                print(f"[Search:Hybrid] Found {len(filtered)} docs in summaries (>{self.summary_threshold}), skipping full search.")
+                print(f"[Search:Hybrid] Found {len(filtered)} docs in summaries (>={self.summary_threshold}), skipping full search.")
                 combined_results.extend([doc.page_content for doc in filtered])
                 all_sources.extend(sources)
                 return combined_results, all_sources
@@ -191,20 +178,8 @@ class Rizzbot:
         # If we didn't find enough in summaries, search full vectorstore
         print(f"[Search:Hybrid] Trying full vectorstore...")
         try:
-            # Try MultiQueryRetriever first, fall back to direct search
-            try:
-                retriever = MultiQueryRetriever.from_llm(
-                    retriever=self.full_vectorstore.as_retriever(search_kwargs={"k": self.top_k}),
-                    llm=self.expand_llm
-                )
-                docs = retriever.invoke(question)
-                print(f"[Search:Hybrid] MultiQueryRetriever succeeded for full")
-            except (ImportError, ModuleNotFoundError) as e:
-                print(f"[Search:Hybrid] MultiQueryRetriever unavailable ({e}), using direct search")
-                docs = self.full_vectorstore.similarity_search(question, k=self.top_k)
-            except Exception as e:
-                print(f"[Search:Hybrid] MultiQueryRetriever failed ({e}), using direct search")
-                docs = self.full_vectorstore.similarity_search(question, k=self.top_k)
+            docs = self.full_vectorstore.similarity_search(question, k=self.top_k)
+            print(f"[Search:Hybrid] Direct search succeeded for full")
                 
             filtered, sources = self._filter_by_similarity(question_embedding, docs, self.similarity_threshold)
             print(f"[Search:Hybrid] {len(filtered)} docs passed threshold in full.")
